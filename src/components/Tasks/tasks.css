@@ -1,0 +1,130 @@
+.task-container {
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.task-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-input {
+  display: block;
+  margin-top: 8px;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.task-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+}
+
+.task-error {
+  color: red;
+  font-size: 12px;
+}
+
+.task-btn {
+  background-color: #1976d2;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.task-btn:hover {
+  background-color: #125ea2;
+}
+
+.task-btn-cancel {
+  background-color: gray;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.task-list {
+  margin-top: 20px;
+}
+
+.task-card {
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.task-card-title {
+  margin-bottom: 5px;
+}
+
+.task-img {
+  width: 100px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+.task-actions {
+  margin-top: 10px;
+}
+
+.task-edit {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.task-delete {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.task-img-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.task-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+
+.task-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+}

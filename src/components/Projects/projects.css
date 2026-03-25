@@ -1,0 +1,145 @@
+.proj-container {
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.proj-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.proj-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.proj-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.proj-label {
+  font-weight: bold;
+}
+
+.proj-error {
+  color: red;
+  font-size: 12px;
+}
+
+.proj-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.proj-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.proj-btn {
+  background-color: #1976d2;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.proj-btn:hover {
+  background-color: #125ea2;
+}
+
+.proj-btn-cancel {
+  background-color: gray;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.proj-list {
+  margin-top: 20px;
+}
+
+.proj-card {
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.proj-card-title {
+  margin-bottom: 5px;
+}
+
+.proj-img {
+  width: 100px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+.proj-actions {
+  margin-top: 10px;
+}
+
+.proj-edit {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.proj-delete {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Upload button */
+.proj-file-label {
+  display: inline-block;
+  background-color: #1976d2;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 10px;
+}
+
+.proj-file-label:hover {
+  background-color: #125ea2;
+}
+
+/* Preview image */
+.proj-preview-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Card image */
+.proj-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-top: 10px;
+}
