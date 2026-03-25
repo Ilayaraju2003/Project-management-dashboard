@@ -143,3 +143,12 @@
   border-radius: 6px;
   margin-top: 10px;
 }
+
+.proj-message {
+  background: #e3f2fd;
+  color: #0d47a1;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+}

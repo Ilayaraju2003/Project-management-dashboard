@@ -128,3 +128,12 @@
   margin-top: 10px;
   border: 1px solid #ccc;
 }
+
+.task-message {
+  background: #f1f8e9;
+  color: #33691e;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-weight: 500;
+}

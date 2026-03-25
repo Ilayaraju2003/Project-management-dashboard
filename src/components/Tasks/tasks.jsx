@@ -8,7 +8,7 @@ import {
 } from "../../features/tasks/taskSlice";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./tasks.css";
 
 // ✅ validation
@@ -28,8 +28,9 @@ export default function Tasks() {
   const employees = useSelector((state) => state.employees);
 
   const [editId, setEditId] = useState(null);
-  const [image, setImage] = useState(""); // ✅ store base64
+  const [image, setImage] = useState("");
   const [preview, setPreview] = useState("");
+  const [message, setMessage] = useState(""); // ✅ NEW
 
   const {
     register,
@@ -50,11 +51,19 @@ export default function Tasks() {
 
   const filteredEmployees = selectedProject
     ? employees.filter((emp) =>
-      selectedProject.assignedEmployees.includes(emp.id)
-    )
+        selectedProject.assignedEmployees.includes(emp.id)
+      )
     : [];
 
-  // ✅ handle image upload
+  // ✅ AUTO CLEAR MESSAGE
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // ✅ IMAGE UPLOAD
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -62,14 +71,14 @@ export default function Tasks() {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setImage(reader.result);     // base64
-      setPreview(reader.result);   // preview
+      setImage(reader.result);
+      setPreview(reader.result);
     };
 
     reader.readAsDataURL(file);
   };
 
-  // ✅ submit
+  // ✅ SUBMIT
   const onSubmit = (data) => {
     const project = projects.find((p) => p.id === data.projectId);
 
@@ -78,7 +87,7 @@ export default function Tasks() {
     );
 
     if (!isValidEmployee) {
-      alert("Employee not assigned to this project");
+      setMessage("❌ Employee not assigned to this project");
       return;
     }
 
@@ -90,9 +99,11 @@ export default function Tasks() {
 
     if (editId) {
       dispatch(updateTask({ id: editId, ...taskData }));
+      setMessage("✏️ Task updated successfully");
       setEditId(null);
     } else {
       dispatch(addTask(taskData));
+      setMessage("✅ Task added successfully");
     }
 
     reset();
@@ -100,7 +111,7 @@ export default function Tasks() {
     setPreview("");
   };
 
-  // ✅ edit
+  // ✅ EDIT
   const handleEdit = (task) => {
     setEditId(task.id);
 
@@ -112,20 +123,27 @@ export default function Tasks() {
 
     setImage(task.image);
     setPreview(task.image);
+
+    setMessage("✏️ Editing task");
   };
 
+  // ✅ CANCEL
   const handleCancel = () => {
     setEditId(null);
     reset();
     setImage("");
     setPreview("");
+    setMessage("❌ Edit cancelled");
   };
 
   return (
     <div className="task-container">
       <h2 className="task-title">Tasks</h2>
 
-      {/* ✅ FORM */}
+      {/* ✅ MESSAGE */}
+      {message && <p className="task-message">{message}</p>}
+
+      {/* FORM */}
       <form className="task-form" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="task-input"
@@ -139,9 +157,7 @@ export default function Tasks() {
           placeholder="Description"
           {...register("description")}
         />
-        <p className="task-error">
-          {errors.description?.message}
-        </p>
+        <p className="task-error">{errors.description?.message}</p>
 
         <select className="task-select" {...register("projectId")}>
           <option value="">Select Project</option>
@@ -171,18 +187,17 @@ export default function Tasks() {
           {...register("eta")}
         />
 
-        {/* ✅ Image Upload */}
-        <label className="task-input" >
+        {/* IMAGE */}
+        <label className="task-input">
           Reference Images
           <input
-            className="task-input"
             type="file"
+            className="task-input"
             accept="image/*"
             onChange={handleImageChange}
           />
         </label>
 
-        {/* ✅ Preview */}
         {preview && (
           <img className="task-preview" src={preview} alt="" />
         )}
@@ -202,7 +217,7 @@ export default function Tasks() {
         )}
       </form>
 
-      {/* ✅ TASK LIST */}
+      {/* TASK LIST */}
       <div className="task-list">
         {tasks.map((task) => {
           const project = projects.find(
@@ -231,11 +246,13 @@ export default function Tasks() {
                 >
                   Edit
                 </button>
+
                 <button
                   className="task-delete"
-                  onClick={() =>
-                    dispatch(deleteTask(task.id))
-                  }
+                  onClick={() => {
+                    dispatch(deleteTask(task.id));
+                    setMessage("❌ Task deleted successfully");
+                  }}
                 >
                   Delete
                 </button>

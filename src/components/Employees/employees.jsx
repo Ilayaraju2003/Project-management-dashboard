@@ -8,7 +8,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "./employees.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const schema = yup.object({
     name: yup.string().required("Name required"),
@@ -23,10 +23,21 @@ export default function Employees() {
 
     const [editId, setEditId] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
+    const [message, setMessage] = useState("");
 
     const { register, handleSubmit, reset, setValue } = useForm({
         resolver: yupResolver(schema),
     });
+
+    // ✅ AUTO CLEAR MESSAGE AFTER 3 SECONDS
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage("");
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
     // ✅ IMAGE UPLOAD
     const handleImageUpload = (e) => {
@@ -37,25 +48,28 @@ export default function Employees() {
 
         reader.onloadend = () => {
             setImagePreview(reader.result);
-            setValue("image", reader.result); // store base64
+            setValue("image", reader.result);
         };
 
         reader.readAsDataURL(file);
     };
 
+    // ✅ SUBMIT
     const onSubmit = (data) => {
         const exists = employees.find(emp => emp.email === data.email);
 
         if (exists && !editId) {
-            alert("Email already exists");
+            setMessage("❌ Email already exists");
             return;
         }
 
         if (editId) {
             dispatch(updateEmployee({ id: editId, ...data }));
+            setMessage("✏️ Employee updated successfully");
             setEditId(null);
         } else {
             dispatch(addEmployee(data));
+            setMessage("✅ Employee added successfully");
         }
 
         reset();
@@ -71,30 +85,51 @@ export default function Employees() {
         setValue("email", emp.email);
         setValue("image", emp.image);
 
-        setImagePreview(emp.image); // show preview
+        setImagePreview(emp.image);
+
+        setMessage("✏️ Editing employee");
     };
 
+    // ✅ CANCEL EDIT
     const handleCancel = () => {
         setEditId(null);
         reset();
         setImagePreview("");
+        setMessage("❌ Edit cancelled");
     };
 
     return (
         <div className="container">
             <h2 className="title">Employees</h2>
 
+            {/* ✅ MESSAGE DISPLAY */}
+            {message && <p className="message">{message}</p>}
+
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                <input className="input" placeholder="Name" {...register("name")} />
-                <input className="input" placeholder="Position" {...register("position")} />
-                <input className="input" placeholder="Email" {...register("email")} />
+                <input
+                    className="input"
+                    placeholder="Name"
+                    {...register("name")}
+                />
+
+                <input
+                    className="input"
+                    placeholder="Position"
+                    {...register("position")}
+                />
+
+                <input
+                    className="input"
+                    placeholder="Email"
+                    {...register("email")}
+                />
 
                 {/* FILE INPUT */}
-                <label className="file-input" >
+                <label className="file-input">
                     Profile Image
                     <input
-                        className="file-input"
                         type="file"
+                        className="file-input"
                         accept="image/*"
                         onChange={handleImageUpload}
                         hidden
@@ -121,11 +156,16 @@ export default function Employees() {
                 )}
             </form>
 
+            {/* EMPLOYEE LIST */}
             <div className="list">
                 {employees.map(emp => (
                     <div className="card" key={emp.id}>
                         <div>
-                            <img src={emp.image} className="emp-passport-img" alt="employee" />
+                            <img
+                                src={emp.image}
+                                className="emp-passport-img"
+                                alt="employee"
+                            />
                             <br />
                             <strong>Name: </strong>{emp.name} <br />
                             <strong>Position: </strong>{emp.position} <br />
@@ -142,7 +182,10 @@ export default function Employees() {
 
                             <button
                                 className="deleteBtn"
-                                onClick={() => dispatch(deleteEmployee(emp.id))}
+                                onClick={() => {
+                                    dispatch(deleteEmployee(emp.id));
+                                    setMessage("❌ Employee deleted successfully");
+                                }}
                             >
                                 Delete
                             </button>

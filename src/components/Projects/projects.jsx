@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,7 +8,7 @@ import {
 } from "../../features/projects/projectSlice";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./projects.css";
 
 // validation schema
@@ -28,6 +29,7 @@ export default function Projects() {
 
   const [editId, setEditId] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
+  const [message, setMessage] = useState("");
 
   const {
     register,
@@ -43,8 +45,15 @@ export default function Projects() {
     },
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedEmployees = watch("assignedEmployees");
+
+  // ✅ AUTO CLEAR MESSAGE
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   // ✅ IMAGE UPLOAD
   const handleLogoUpload = (e) => {
@@ -70,17 +79,20 @@ export default function Projects() {
     setValue("assignedEmployees", updated);
   };
 
+  // ✅ SUBMIT
   const onSubmit = (data) => {
     if (new Date(data.startDate) >= new Date(data.endDate)) {
-      alert("Start date must be before End date");
+      setMessage("❌ Start date must be before End date");
       return;
     }
 
     if (editId) {
       dispatch(updateProject({ id: editId, ...data }));
+      setMessage("✏️ Project updated successfully");
       setEditId(null);
     } else {
       dispatch(addProject(data));
+      setMessage("✅ Project created successfully");
     }
 
     reset({ assignedEmployees: [] });
@@ -99,17 +111,23 @@ export default function Projects() {
     setValue("assignedEmployees", project.assignedEmployees);
 
     setLogoPreview(project.logo);
+    setMessage("✏️ Editing project");
   };
 
+  // ✅ CANCEL
   const handleCancel = () => {
     setEditId(null);
     reset({ assignedEmployees: [] });
     setLogoPreview("");
+    setMessage("❌ Edit cancelled");
   };
 
   return (
     <div className="proj-container">
       <h2 className="proj-title">Projects</h2>
+
+      {/* ✅ MESSAGE */}
+      {message && <p className="proj-message">{message}</p>}
 
       <form className="proj-form" onSubmit={handleSubmit(onSubmit)}>
         <input
@@ -126,7 +144,7 @@ export default function Projects() {
         />
         <p className="proj-error">{errors.description?.message}</p>
 
-        {/* LOGO UPLOAD */}
+        {/* LOGO */}
         <label className="proj-file-label">
           Upload Logo
           <input
@@ -192,13 +210,9 @@ export default function Projects() {
         {projects.map(project => (
           <div className="proj-card" key={project.id}>
             <p><strong>Title:</strong> {project.title}</p>
-            <p><strong>Description:</strong>  {project.description}</p>
+            <p><strong>Description:</strong> {project.description}</p>
 
-            <img
-              className="proj-img"
-              src={project.logo}
-              alt="logo"
-            />
+            <img className="proj-img" src={project.logo} alt="logo" />
 
             <p>
               <strong>ETM:</strong> {project.startDate} → {project.endDate}
@@ -208,7 +222,7 @@ export default function Projects() {
               <strong>Employees:</strong>
               {project.assignedEmployees.map(id => {
                 const emp = employees.find(e => e.id === id);
-                return emp ? ` ${emp.name} , ` : "";
+                return emp ? ` ${emp.name}, ` : "";
               })}
             </p>
 
@@ -222,7 +236,10 @@ export default function Projects() {
 
               <button
                 className="proj-delete"
-                onClick={() => dispatch(deleteProject(project.id))}
+                onClick={() => {
+                  dispatch(deleteProject(project.id));
+                  setMessage("❌ Project deleted successfully");
+                }}
               >
                 Delete
               </button>
