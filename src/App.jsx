@@ -9,6 +9,7 @@ function App() {
   return (
     <BrowserRouter>
       <nav className="nav-container">
+        <Link className="nav-link" to="/"></Link>
         <Link className="nav-link" to="/employees">Employees</Link>
         <Link className="nav-link" to="/projects">Projects</Link>
         <Link className="nav-link" to="/tasks">Tasks</Link>
@@ -16,6 +17,7 @@ function App() {
       </nav>
 
       <Routes>
+        <Route path="/" element={<Employees />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/tasks" element={<Tasks />} />
