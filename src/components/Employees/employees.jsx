@@ -128,7 +128,8 @@ export default function Employees() {
                             <img src={emp.image} className="emp-passport-img" alt="employee" />
                             <br />
                             <strong>Name: </strong>{emp.name} <br />
-                            <strong>Position: </strong>{emp.position}
+                            <strong>Position: </strong>{emp.position} <br />
+                            <strong>Email: </strong>{emp.email}
                         </div>
 
                         <div className="actions">
