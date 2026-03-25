@@ -13,7 +13,7 @@ function App() {
         <Link className="nav-link" to="/employees">Employees</Link>
         <Link className="nav-link" to="/projects">Projects</Link>
         <Link className="nav-link" to="/tasks">Tasks</Link>
-        <Link className="nav-link" to="/">Dashboard</Link>
+        <Link className="nav-link" to="/dashboard">Dashboard</Link>
       </nav>
 
       <Routes>
@@ -21,7 +21,7 @@ function App() {
         <Route path="/employees" element={<Employees />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/tasks" element={<Tasks />} />
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
